@@ -1,21 +1,33 @@
-import { useEffect, useState } from "react";
-
+import { useEffect, useState,useContext } from "react";
+import { tokenContext } from "../App.jsx";
+import ProductEdit from "./ProductEdit.jsx";
 export default function ProductList() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isEdit, setIsEdit] = useState(false);
+    const token = useContext(tokenContext);
+    function handleButtonEdit(id) {
+        setIsEdit(id);
+    }
     useEffect(() => {
-        console.log(isLoading);
+       
         setIsLoading(true);
-        fetch('https://dummyjson.com/products')
+        fetch('https://dummyjson.com/products', {
+            headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        })
             .then(res => res.json())
             .then(data => setProducts(data.products));
         setIsLoading((prev) => !prev);
     }, []);
-
+    if(isEdit){
+       return <ProductEdit id={isEdit} />;
+    }
     return (
       <div className="content-wrapper">
 
-      {/* Page header */}
+     
       <section className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">
@@ -55,6 +67,7 @@ export default function ProductList() {
                     <th>Title</th>
                     <th>Price ($)</th>
                     <th>Category</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -64,6 +77,7 @@ export default function ProductList() {
                     <td>{product.title}</td> 
                     <td>{product.price}</td> 
                     <td>{product.category}</td> 
+                    <td><button onClick={() => handleButtonEdit(product.id)} className="btn btn-sm btn-primary">Edit</button></td> 
                     </tr> )
                  )}
                 </tbody>
