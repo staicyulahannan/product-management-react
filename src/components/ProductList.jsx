@@ -54,9 +54,9 @@ export default function ProductList() {
               <h3 className="card-title">Product List</h3>
 
               <div className="card-tools">
-                <button className="btn btn-primary btn-sm">
+                <a className="btn btn-primary btn-sm" href="/product/add">
                   <i className="fas fa-plus"></i> Add Product
-                </button>
+                </a>
               </div>
             </div>
 
