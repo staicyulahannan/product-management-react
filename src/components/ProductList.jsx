@@ -1,6 +1,7 @@
 import { useEffect, useState,useContext } from "react";
-import { tokenContext } from "../App.jsx";
+import { tokenContext } from "./Login.jsx";
 import ProductEdit from "./ProductEdit.jsx";
+import { Link } from "react-router-dom";
 export default function ProductList() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +78,7 @@ export default function ProductList() {
                     <td>{product.title}</td> 
                     <td>{product.price}</td> 
                     <td>{product.category}</td> 
-                    <td><button onClick={() => handleButtonEdit(product.id)} className="btn btn-sm btn-primary">Edit</button></td> 
+                    <td><Link to={`/products/${product.id}/edit`} className="btn btn-sm btn-primary">Edit</Link></td> 
                     </tr> )
                  )}
                 </tbody>

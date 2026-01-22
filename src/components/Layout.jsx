@@ -1,7 +1,7 @@
 export default function Layout({children, setToken}) {
     function handleLogout(e) {
         e.preventDefault();
-        localStorage.removeItem('token');
+
         setToken(null);
     }
   return (

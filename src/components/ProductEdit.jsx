@@ -1,8 +1,9 @@
 import { useEffect,  useRef } from "react";
+import { useParams } from "react-router-dom";
 import FormGroup from "./FormGroup";
 
-export  default function ProductEdit({id}) {
-   // const idRef = useRef();
+export  default function ProductEdit( ){
+  const { id } = useParams();
     const titleRef = useRef();
     const priceRef = useRef();
     const categoryRef = useRef();
@@ -19,7 +20,9 @@ fetch(`https://dummyjson.com/products/${id}`, {
   })
 })
 .then(res => res.json())
-.then(console.log);
+.then(() => {
+  window.location.href = "/products";
+});
     }
     useEffect(() => {
         fetch(`https://dummyjson.com/products/${id}`)
