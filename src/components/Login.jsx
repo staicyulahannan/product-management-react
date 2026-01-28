@@ -1,45 +1,41 @@
 import FormGroup from "./FormGroup";
-import Layout from "./Layout";
-import ProductList from "./ProductList";
-import { useRef,useState ,createContext } from "react";
+import { useEffect } from "react";
+import loginAuth from "./LoginRouter";
+import { useRef,useState ,createContext,useContext } from "react";
 import { useNavigate } from "react-router-dom";
- export  const tokenContext = createContext();
+import { AuthContext } from "../context/AuthContext";
+
 export default function Login() { 
   const navigate = useNavigate();
 
-  const [token, setToken] = useState(null);
+  const { token, saveToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState(null);
   
     const usernameRef = useRef();
     const passwordRef = useRef(); 
-    function handleButtonClick(e) {
-    e.preventDefault();    
-    fetch('https://dummyjson.com/auth/login', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({    
-    username: usernameRef.current.value,
-    password: passwordRef.current.value,
-    expiresInMins: 30, // optional, defaults to 60
-   
-  }),
-  
-})
-.then(res => res.json())
-.then(data=>{
-    if (data && data.accessToken) {
-      
-      setToken(data.accessToken); 
-      navigate("/products");
-    } else {
-      setErrorMessage(data.message || "Login failed");
-    }
-  })
+   function handleButtonClick(e) {
+    e.preventDefault();
 
+    loginAuth(
+      usernameRef.current.value,
+      passwordRef.current.value
+    ).then(data => {
+      if (data.accessToken) {
+        saveToken(data.accessToken);
+        navigate("/products");
+      } else {
+        setErrorMessage(data.message || "Login failed");
+      }
+    });
   }
+  useEffect(() => {
+    if (token) {
+      navigate("/products", { replace: true });
+    }
+  }, [token, navigate]);
     return (
    <>
-    {!token?( 
+   
         <div className="login-page"> 
         <h2>Login Page</h2>
         <form>
@@ -50,10 +46,7 @@ export default function Login() {
         </form>
     
     </div>  
-    ):(<tokenContext.Provider value={token}>
-        <Layout setToken={setToken}><ProductList /></Layout>
-    </tokenContext.Provider>
-  )}
+   
     </>
 
     );  

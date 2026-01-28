@@ -1,10 +1,19 @@
+import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { useContext } from "react";
+  import { AuthContext } from "../context/AuthContext";
 export default function Layout({children, setToken}) {
+  const { clearToken } = useContext(AuthContext);
+    const navigate = useNavigate();
     function handleLogout(e) {
         e.preventDefault();
-
-        setToken(null);
+        clearToken();
+        console.log("Logged out");
+        //navigate('/');
+        
     }
   return (
+
        
         <div className="hold-transition sidebar-mini layout-fixed row">
       <div className="wrapper col-2">
@@ -66,7 +75,7 @@ export default function Layout({children, setToken}) {
         </aside>
         </div>
         <div className="content col-10">
-        {children}
+       <Outlet />
         </div>
 
         </div>

@@ -1,9 +1,10 @@
 import { useEffect,  useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import FormGroup from "./FormGroup";
 
 export  default function ProductAdd (){
   const { id } = useParams();
+  const navigate = useNavigate();
     const titleRef = useRef();
     const priceRef = useRef();
     const categoryRef = useRef();
@@ -21,7 +22,7 @@ fetch(`https://dummyjson.com/products/add`, {
 })
 .then(res => res.json())
 .then(() => {
-  window.location.href = "/products";
+   navigate("/products");
 });
     }
    
